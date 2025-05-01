@@ -52,8 +52,8 @@ run_btn = st.button("Run grading", disabled=not (uploaded_files and rubric_file 
 if run_btn:
     # read rubric & system prompt
     from grader import read_docx  # re-use helper
-    rubric_text = read_docx(Path(rubric_file.name)) if rubric_file else ""
-    system_prompt = read_docx(Path(system_file.name)) if system_file else ""
+    rubric_text  = read_docx(rubric_file)  if rubric_file  else ""
+    system_prompt = read_docx(system_file) if system_file else ""
 
     # temporarily save uploaded essays to disk-like Path objects
     tmp_paths = []

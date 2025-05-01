@@ -14,20 +14,21 @@ import openai
 import pandas as pd
 from docx import Document
 import pdfplumber
+from typing import Union, IO
+from pathlib import Path
+from docx import Document as _DocxDocument
 
 
 # ---------- helpers ----------
-def read_docx(file_path: Path) -> str:
-    doc = Document(file_path)
+def read_docx(src: Union[Path, str, IO[bytes]]) -> str:
+    """Return full text from a .docx given a path *or* a byte stream."""
+    doc = _DocxDocument(src)          # works for both
     return "\n".join(p.text for p in doc.paragraphs)
 
 
-def read_pdf(file_path: Path) -> str:
-    pages = []
-    with pdfplumber.open(file_path) as pdf:
-        for page in pdf.pages:
-            pages.append(page.extract_text() or "")
-    return "\n".join(pages)
+def read_pdf(src: Union[Path, IO[bytes]]) -> str:
+    with pdfplumber.open(src) as pdf:
+        return "\n".join((page.extract_text() or "") for page in pdf.pages)
 
 
 def extract_json_from_response(raw: str) -> dict | None:
