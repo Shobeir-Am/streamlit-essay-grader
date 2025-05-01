@@ -25,7 +25,14 @@ api_key = st.sidebar.text_input(
 openai.api_key = api_key
 
 model = st.sidebar.selectbox(
-    "Model", ["gpt-4o-mini", "gpt-4o", "gpt-4-turbo"], index=1
+    "Model", [  "o4-mini",          
+        "o3",               
+        "o1",               
+        "gpt-4o-mini",
+        "gpt-4o",
+        "gpt-4o-32k",
+        "gpt-4-turbo",
+        "gpt-3.5-turbo-0125",], index=0
 )
 temperature = st.sidebar.slider("Temperature", 0.0, 1.0, 0.6, 0.05)
 delay = st.sidebar.number_input(
@@ -86,3 +93,5 @@ if run_btn:
             "spreadsheetml.sheet"
         ),
     )
+    
+    

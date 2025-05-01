@@ -109,18 +109,22 @@ def grade_files(
 
         # Call OpenAI
         try:
-            resp = openai.ChatCompletion.create(
-                model=model, messages=messages, temperature=temperature
+            # NEW v1-style call 
+            resp = openai.chat.completions.create(
+                model=model,
+                messages=messages,
+                temperature=temperature,
             )
             raw = resp.choices[0].message.content.strip()
             parsed = extract_json_from_response(raw)
-
             feedback = parsed.get("feedback") if parsed else raw
-            grade = parsed.get("grade") if parsed else "not found"
+            grade    = parsed.get("grade")    if parsed else "not found"
         except Exception as exc:
             feedback, grade = f"ERROR: {exc}", "error"
 
-        results.append(dict(file_name=fname, feedback=feedback, grade=grade))
+        results.append(
+            dict(file_name=fname, feedback=feedback, grade=grade)
+        )
         time.sleep(delay)
 
     return pd.DataFrame(results)
